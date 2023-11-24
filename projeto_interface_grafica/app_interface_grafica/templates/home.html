@@ -1,12 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sua Página Inicial</title>
-    
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interface do usuário</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
+<!-- Adicione este script na sua página HTML -->
+<script>
+  document.addEventListener('keydown', function(event) {
+      // Capturar a tecla pressionada
+      var tecla = event.key;
+
+      // Mostrar a tecla na página
+      document.getElementById('teclaRegistrada').innerText = 'Tecla Registrada: ' + tecla;
+
+      // Enviar para o servidor Django
+      fetch('/registrar-tecla/', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'X-CSRFToken': 'seu_csrf_token_aqui',  // Adicione o token CSRF se estiver usando
+          },
+          body: 'teclas=' + encodeURIComponent(tecla),
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.log('Resposta do servidor:', data);
+      })
+      .catch(error => {
+          console.error('Erro:', error);
+      });
+  });
+</script>
+
+<!-- ... Outro conteúdo HTML ... -->
+
+<h1 id="teclaRegistrada">Tecla Registrada:</h1>
+<p>A tecla <span id="tecla"></span> foi registrada com sucesso!</p>
+
 <center>    
     <img src="{% url 'obter_video' %}" alt="Vídeo da Câmera" style="max-width: 50%; height: auto; ;">
 </center>
